@@ -28,6 +28,8 @@ Here is a checklist of what you need:
 - [ ] A code editor with Rust support (e.g. [VS Code](https://code.visualstudio.com/), [RustRover](https://www.jetbrains.com/rust/), [Neovim](https://neovim.io/), etc.)
 - [ ] An USB-C cable that supports data transfer (not just charging)
 
+---
+
 ### Installing Rust
 
 Oh, you are asking what is Rust? You can think of it as our cooking pot. It provides a safe and leak-free environment for us to cook (water & memory leaks).
@@ -64,6 +66,8 @@ cargo 1.90.0 (840b83a10 2025-07-30)
 
 > [!NOTE]  
 > Your output may vary depending on the version you installed. It should be all good as long as you don't get any errors.
+
+---
 
 ### Installing ESP32 toolchain
 
@@ -112,6 +116,8 @@ And then hit this single-line command to install the toolchain:
 espup install
 ```
 
+---
+
 ### Installing ESP32 tools
 
 We have raw patatoes, carrots, and onions. But we can't just throw them into the pot without peeling and cutting them first.
@@ -133,6 +139,8 @@ espflash 4.0.1
 > [!IMPORTANT]  
 > We won't be calling `espflash` directly. Instead, it is being used as a runner in our [`config.toml`](template/.cargo/config.toml) file and automatically invoked by `cargo` when we run `cargo run`, which is more convenient!
 
+---
+
 ## Testing your setup
 
 Now that you have everything ready, let's start dropping some ingredients into our cooking pot and check out how it tastes!
@@ -145,12 +153,36 @@ TODO
 
 Now look at what you did!
 
-![](assets/gusteau-and-remy.png)
+<img src="assets/gusteau-and-remy.png" width="700">
+
+---
 
 ## Ending
 
 Now, it's my turn to help you out with what you want to build.
 
-![](assets/gusteau-bon-appetit.png)
+<img src="assets/gusteau-bon-appetit.png" width="700">
 
 _Are you ready to cook?_
+
+---
+
+## Troubleshooting
+
+Oh no!
+
+![](assets/remy-walk.gif)
+
+### Windows-specific issues
+
+TODO
+
+- WSL
+
+### MacOS-specific issues
+
+- Permission issues with the serial
+
+### Linux-specific issues
+
+There can't be any issues. Linux is just perfect.
