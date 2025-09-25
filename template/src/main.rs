@@ -1,103 +1,39 @@
-use esp_idf_svc::hal::delay::Ets;
-use esp_idf_svc::hal::gpio::{AnyIOPin, InterruptType, PinDriver};
-use esp_idf_svc::hal::prelude::*;
-use esp_idf_svc::hal::spi::config::MODE_3;
-use esp_idf_svc::hal::spi::{SpiConfig, SpiDeviceDriver, SpiDriverConfig};
-use mipidsi::Builder;
-use mipidsi::interface::SpiInterface;
-use mipidsi::models::ST7789;
-use mipidsi::options::{ColorInversion, Orientation, Rotation};
-use mousefood::embedded_graphics::draw_target::DrawTarget;
-use mousefood::embedded_graphics::prelude::*;
 use mousefood::prelude::*;
+use mousefood::ratatui::widgets::{Block, Paragraph};
 use ratatui_mousefood_template::app::App;
-use ratatui_mousefood_template::button::{Button, ButtonState};
+use ratatui_mousefood_template::button::Button;
 
-const DISPLAY_OFFSET: (u16, u16) = (52, 40);
-const DISPLAY_SIZE: (u16, u16) = (135, 240);
+#[derive(Default)]
+pub struct AppState {
+    button_pressed: Option<Button>,
+}
+
+impl App for AppState {
+    fn draw(&self, frame: &mut Frame) {
+        let text = Line::from("Ratatui on embedded devices!").dark_gray();
+
+        let button_text = match self.button_pressed {
+            Some(button) => Line::from(vec![
+                "You pressed: ".dark_gray(),
+                button.to_string().yellow(),
+            ]),
+            None => Line::from("Press a button...").dark_gray(),
+        };
+
+        let paragraph = Paragraph::new(Text::from(vec![text, button_text]));
+
+        let bordered_block = Block::bordered()
+            .border_style(Style::new().yellow())
+            .title("Mousefood");
+
+        frame.render_widget(paragraph.block(bordered_block), frame.area());
+    }
+
+    fn handle_press(&mut self, button: Button) {
+        self.button_pressed = Some(button);
+    }
+}
 
 fn main() {
-    esp_idf_svc::sys::link_patches();
-    esp_idf_svc::log::EspLogger::initialize_default();
-
-    let peripherals = Peripherals::take().unwrap();
-
-    // Turn on display backlight
-    let mut backlight = PinDriver::output(peripherals.pins.gpio4).unwrap();
-    backlight.set_high().unwrap();
-
-    // Configure SPI
-    let config = SpiConfig::new()
-        .write_only(true)
-        .baudrate(80u32.MHz().into())
-        .data_mode(MODE_3);
-    let spi_device = SpiDeviceDriver::new_single(
-        peripherals.spi2,
-        peripherals.pins.gpio18,
-        peripherals.pins.gpio19,
-        Option::<AnyIOPin>::None,
-        Some(peripherals.pins.gpio5),
-        &SpiDriverConfig::new(),
-        &config,
-    )
-    .unwrap();
-    let buffer = Box::leak(Box::new([0_u8; 4096]));
-    let spi_interface = SpiInterface::new(
-        spi_device,
-        PinDriver::output(peripherals.pins.gpio16).unwrap(),
-        buffer,
-    );
-
-    // Configure display
-    let mut delay = Ets;
-    let mut display = Builder::new(ST7789, spi_interface)
-        .invert_colors(ColorInversion::Inverted)
-        .reset_pin(PinDriver::output(peripherals.pins.gpio23).unwrap())
-        .display_offset(DISPLAY_OFFSET.0, DISPLAY_OFFSET.1)
-        .display_size(DISPLAY_SIZE.0, DISPLAY_SIZE.1)
-        .orientation(Orientation::new().rotate(Rotation::Deg90))
-        .init(&mut delay)
-        .expect("Failed to init display");
-
-    display
-        .clear(Rgb565::BLACK)
-        .expect("Failed to clear display");
-
-    let mut button1 = PinDriver::input(peripherals.pins.gpio35).unwrap();
-    button1.set_interrupt_type(InterruptType::NegEdge).unwrap();
-    let mut button1_state = ButtonState::new();
-
-    let mut button2 = PinDriver::input(peripherals.pins.gpio0).unwrap();
-    button2.set_interrupt_type(InterruptType::NegEdge).unwrap();
-    let mut button2_state = ButtonState::new();
-
-    // Setup Mousefood and Ratatui
-    let backend = EmbeddedBackend::new(&mut display, Default::default());
-    let mut terminal = Terminal::new(backend).unwrap();
-
-    let mut app = App::default();
-
-    loop {
-        let button1_pressed = button1.is_low();
-        let button2_pressed = button2.is_low();
-
-        if button1_pressed && button2_pressed {
-            app.handle_press(Button::Both);
-            Ets::delay_ms(100);
-        } else {
-            button1_state.update(button1_pressed, |press_type| {
-                app.handle_press(Button::Button1(press_type));
-            });
-
-            button2_state.update(button2_pressed, |press_type| {
-                app.handle_press(Button::Button2(press_type));
-            });
-        }
-
-        terminal
-            .draw(|f| {
-                app.draw(f);
-            })
-            .unwrap();
-    }
+    AppState::default().run()
 }
