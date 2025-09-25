@@ -1,2 +1,5 @@
-pub mod app;
+/// Application setup.
+pub mod setup;
+
+/// Button handling.
 pub mod button;

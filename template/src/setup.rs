@@ -12,12 +12,23 @@ use mousefood::embedded_graphics::draw_target::DrawTarget;
 use mousefood::embedded_graphics::prelude::*;
 use mousefood::prelude::*;
 
+/// Offset to align the display correctly.
 const DISPLAY_OFFSET: (u16, u16) = (52, 40);
+
+/// Display size in pixels.
 const DISPLAY_SIZE: (u16, u16) = (135, 240);
 
+/// Application trait to be implemented by the user.
 pub trait App {
+    /// Draw the UI frame.
     fn draw(&self, frame: &mut Frame);
+
+    /// Handle button press events.
     fn handle_press(&mut self, button: Button);
+
+    /// Run the application.
+    ///
+    /// Default implementation provided. Do not override unless necessary.
     fn run(self)
     where
         Self: Sized,
@@ -26,6 +37,15 @@ pub trait App {
     }
 }
 
+/// Run the application with the provided [`App`] implementation.
+///
+/// It initializes the hardware, sets up the display and buttons,
+/// and enters the main event loop.
+///
+/// Please note that this function is blocking and will not return.
+/// It is meant to be called once at the start of the program (e.g., in `main`).
+///
+/// Errors are not handled and will cause a panic if they occur.
 fn run_app(mut app: impl App) {
     esp_idf_svc::sys::link_patches();
     esp_idf_svc::log::EspLogger::initialize_default();
@@ -73,19 +93,22 @@ fn run_app(mut app: impl App) {
         .clear(Rgb565::BLACK)
         .expect("Failed to clear display");
 
+    // Configure buttons
     let mut button1 = PinDriver::input(peripherals.pins.gpio35).unwrap();
     button1.set_interrupt_type(InterruptType::NegEdge).unwrap();
-    let mut button1_state = ButtonState::new();
+    let mut button1_state = ButtonState::default();
 
     let mut button2 = PinDriver::input(peripherals.pins.gpio0).unwrap();
     button2.set_interrupt_type(InterruptType::NegEdge).unwrap();
-    let mut button2_state = ButtonState::new();
+    let mut button2_state = ButtonState::default();
 
     // Setup Mousefood and Ratatui
     let backend = EmbeddedBackend::new(&mut display, Default::default());
     let mut terminal = Terminal::new(backend).unwrap();
 
+    // Enter main event loop
     loop {
+        // Handle button states
         let button1_pressed = button1.is_low();
         let button2_pressed = button2.is_low();
 
@@ -102,6 +125,7 @@ fn run_app(mut app: impl App) {
             });
         }
 
+        // Draw the UI
         terminal
             .draw(|f| {
                 app.draw(f);

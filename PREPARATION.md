@@ -47,8 +47,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 This will install the essential binaries like:
 
-- `cargo`: Rust's build system and package manager.
-- `rustc`: The Rust compiler.
+- `cargo`: Rust's build system and package manager (brings you fresh ingredients from crates.io).
+- `rustc`: The Rust compiler (makes sure everything is cooked perfectly).
 
 Now, please take your time to check if Rust is installed correctly by running:
 
@@ -97,7 +97,29 @@ One of the important ingredients that we will drop into our cooking pot is the [
 
 </details>
 
-Alright little rat, now that you know what we are going to cook with, let's get the toolchain ready. You will need the [`espup`](https://github.com/esp-rs/espup) tool to install the `Xtensa` toolchain. It can be installed with our friendly neighborhood package manager `cargo`:
+There are two main Rust frameworks (i.e. hardware abstraction layers - HALs) for ESP32:
+
+| **esp-hal**                     | **esp-idf-hal**                |
+| ------------------------------- | ------------------------------ |
+| Bare metal (`#![no_std]`)       | With standard library support! |
+| Development funded by Espressif | Community effort               |
+|                                 | Requires a custom toolchain    |
+
+> [!IMPORTANT]  
+> `esp-hal` is like cooking without any utensils, while `esp-idf-hal` is like cooking with a full set of utensils and appliances. Both have their own advantages and disadvantages.
+>
+> We will be using the [`esp-idf-hal`](https://github.com/esp-rs/esp-idf-hal) framework for simplicity and ease of use.
+
+<details>
+  <summary>Click here for more specifics.</summary>
+
+ESP-IDF works with FreeRTOS, which is a real-time operating system that provides multitasking and other features. This makes it easier to build complex applications that require concurrency and real-time performance.
+
+On the Rust side, it maps to the standard library, which means you can use familiar Rust constructs like `Vec`, `String`, and `Box`. This makes it easier to write and maintain code, especially for those who are already familiar with Rust.
+
+</details>
+
+Alright little rat, now that you know what we are going to cook with, let's get the ESP-IDF toolchain ready. You will need the [`espup`](https://github.com/esp-rs/espup) tool to install the `Xtensa` toolchain. It can be installed with our friendly neighborhood package manager `cargo`:
 
 ```bash
 cargo install espup
@@ -116,11 +138,32 @@ And then hit this single-line command to install the toolchain:
 espup install
 ```
 
+In case you are wondering, this command will install:
+
+- [Espressif Rust fork](https://github.com/esp-rs/rust) with support for Espressif targets
+- `stable` toolchain with support for RISC-V targets
+- [LLVM fork](https://github.com/espressif/llvm-project) with support for Xtensa targets
+- [GCC toolchain](https://github.com/espressif/crosstool-NG/) that links the final binary
+
+and does not contain any rat poison, don't worry.
+
+If everything goes right, you will have `xtensa-esp32-espidf` toolchain for ESP-IDF framework installed and see a message like this:
+
+> [info]: Installation successfully completed!
+> To get started, you need to set up some environment variables by running: '. ~/export-esp.sh'
+> This step must be done every time you open a new terminal.
+> See other methods for setting the environment in https://esp-rs.github.io/book/installation/riscv-and-xtensa.html#3-set-up-the-environment-variables
+
+This step is like chopping the onions, measuring the flour, and lining up your spices before turning on the stove.
+Otherwise, chaos in the kitchen!
+
+Simply follow the steps [here](https://docs.espressif.com/projects/rust/book/installation/riscv-and-xtensa.html#3-set-up-the-environment-variables).
+
 ---
 
 ### Installing ESP32 tools
 
-We have raw patatoes, carrots, and onions. But we can't just throw them into the pot without peeling and cutting them first.
+We have got potatoes, carrots, and onions (the holy trinity of any good ratatouille). But we can't just throw them into the pot without peeling and cutting them first.
 In other words, we can build Rust for ESP, but we need to actually put it on the board (i.e. _flash it_).
 
 [`espflash`](https://github.com/esp-rs/espflash) is our friend! Simply installed it by:
@@ -147,23 +190,45 @@ Now that you have everything ready, let's start dropping some ingredients into o
 
 ![](assets/remy-cook.gif)
 
-There is a template project in the `template/` folder that you can use to test your setup.
+There is a template project in the [template](template/) folder that you can use to test your setup. See the [documentation there](template/README.md) for more details about specific files.
 
-TODO
+You can build and flash that project to your ESP32 board by running:
+
+```bash
+cd template/
+
+cargo run --release
+```
+
+If you want to see something more impressive, try running one of these applications in the [apps](apps/) folder. For example:
+
+```bash
+git submodule update --init --recursive
+cd apps/mousefood-esp32-demo
+cargo run
+```
 
 Now look at what you did!
 
+<p align="center">
+
 <img src="assets/gusteau-and-remy.png" width="700">
+
+<img src="assets/mousefood-demo.gif" width="600">
+
+</p>
 
 ---
 
 ## Ending
 
-Now, it's my turn to help you out with what you want to build.
+Congratulations, now you are a little chef rat! 👨‍🍳
+
+But the world of cooking is vast and there is much more to explore. Now, lemme teach you some recipes.
 
 <img src="assets/gusteau-bon-appetit.png" width="700">
 
-_Are you ready to cook?_
+_"Remember, anyone can cook — but only the fearless can be great."_
 
 ---
 
@@ -173,15 +238,17 @@ Oh no!
 
 ![](assets/remy-walk.gif)
 
+If you encounter any problems and if you need help, please let the chefs know by [creating a new issue](https://github.com/orhun/pocket-sized-tui-workshop/issues/new).
+
 ### Windows-specific issues
 
-TODO
-
-- WSL
+If you are on Windows without WSL2, things will be much harder. We recommend to install WSL2 and run everything from there.
 
 ### MacOS-specific issues
 
-- Permission issues with the serial
+You might hit permission issues with the USB serial.
+
+See [this link](https://docs.esp-rs.org/std-training/02_1_hardware.html) for checking the hardware.
 
 ### Linux-specific issues
 

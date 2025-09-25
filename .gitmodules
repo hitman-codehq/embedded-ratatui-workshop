@@ -1,0 +1,7 @@
+[submodule "apps/mousefood-esp32-demo"]
+	path = apps/mousefood-esp32-demo
+	url = https://github.com/j-g00da/mousefood-esp32-demo
+
+[submodule "apps/mousefood-benchmark"]
+	path = apps/mousefood-benchmark
+	url = https://github.com/junkdog/mousefood-benchmark/

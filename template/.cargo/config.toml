@@ -3,7 +3,14 @@ target = "xtensa-esp32-espidf"
 
 [target.xtensa-esp32-espidf]
 linker = "ldproxy"
+
+# use [espflash](https://github.com/esp-rs/espflash) to flash and monitor
 runner = "espflash flash --monitor"
+
+# alternatively, you can flash with your browser
+# via [web-flash](https://github.com/esp-rs/esp-web-flash-server)
+# runner = "web-flash --chip=esp32 "
+
 rustflags = [ "--cfg",  "espidf_time64"]
 
 [unstable]

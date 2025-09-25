@@ -1,6 +1,7 @@
 use core::fmt;
 use std::time::Instant;
 
+/// Type of button press: short or long.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ButtonPressType {
     Short,
@@ -16,6 +17,7 @@ impl fmt::Display for ButtonPressType {
     }
 }
 
+/// Button enum representing different button actions.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Button {
     Button1(ButtonPressType),
@@ -34,14 +36,17 @@ impl fmt::Display for Button {
 }
 
 impl Button {
-    pub fn is_mode(&self) -> bool {
+    /// Check if the button is [`Button::Button1`].
+    pub fn is_button1(&self) -> bool {
         matches!(self, Button::Button1(_))
     }
 
-    pub fn is_menu(&self) -> bool {
+    /// Check if the button is [`Button::Button2`].
+    pub fn is_button2(&self) -> bool {
         matches!(self, Button::Button2(_))
     }
 
+    /// Check if a short press was detected.
     pub fn is_short_press(&self) -> bool {
         matches!(
             self,
@@ -49,6 +54,7 @@ impl Button {
         )
     }
 
+    /// Check if a long press was detected.
     pub fn is_long_press(&self) -> bool {
         matches!(
             self,
@@ -57,17 +63,17 @@ impl Button {
     }
 }
 
+/// State of a button, tracking press duration.
+#[derive(Default)]
 pub struct ButtonState {
     pressed_at: Option<Instant>,
 }
 
 impl ButtonState {
-    pub fn new() -> Self {
-        Self { pressed_at: None }
-    }
-}
-
-impl ButtonState {
+    /// Update the button state based on whether it is currently pressed.
+    ///
+    /// If the button was just released, it calls the `on_press` callback with the type of press
+    /// detected.
     pub fn update<F>(&mut self, is_pressed: bool, on_press: F)
     where
         F: FnOnce(ButtonPressType),
