@@ -71,6 +71,9 @@ cargo 1.90.0 (840b83a10 2025-07-30)
 
 ### Installing ESP32 toolchain
 
+> [!TIP]  
+> You can watch [this video](https://www.youtube.com/watch?v=dxgufYRcNDg) ("ESP32 embedded Rust setup explained") to get a general idea of the setup process.
+
 One of the important ingredients that we will drop into our cooking pot is the [**ESP32 T-Display board**](https://lilygo.cc/products/lilygo%C2%AE-ttgo-t-display-1-14-inch-lcd-esp32-control-board):
 
 <img src="assets/t-display.png" width="300">
