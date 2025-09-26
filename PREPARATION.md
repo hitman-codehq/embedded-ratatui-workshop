@@ -157,10 +157,16 @@ If everything goes right, you will have `xtensa-esp32-espidf` toolchain for ESP-
 > This step must be done every time you open a new terminal.
 > See other methods for setting the environment in https://esp-rs.github.io/book/installation/riscv-and-xtensa.html#3-set-up-the-environment-variables
 
+So, run this command to set up the environment variables:
+
+```bash
+. ~/.export-esp.sh
+```
+
 This step is like chopping the onions, measuring the flour, and lining up your spices before turning on the stove.
 Otherwise, chaos in the kitchen!
 
-Simply follow the steps [here](https://docs.espressif.com/projects/rust/book/installation/riscv-and-xtensa.html#3-set-up-the-environment-variables).
+You can also follow the steps [here](https://docs.espressif.com/projects/rust/book/installation/riscv-and-xtensa.html#3-set-up-the-environment-variables) for more details about setting up the environment variables.
 
 ---
 

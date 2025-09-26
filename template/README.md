@@ -48,7 +48,7 @@ rustflags = [ "--cfg",  "espidf_time64"]
 
 Alternatively, you can use [`web-flash`](https://github.com/esp-rs/esp-web-flash-server) to flash the firmware over your web browser:
 
-```
+```toml
 [target.xtensa-esp32-espidf]
 linker = "ldproxy"
 runner = "web-flash --chip=esp32 "
