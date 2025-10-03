@@ -160,7 +160,7 @@ If everything goes right, you will have `xtensa-esp32-espidf` toolchain for ESP-
 So, run this command to set up the environment variables:
 
 ```bash
-. ~/.export-esp.sh
+. ~/export-esp.sh
 ```
 
 This step is like chopping the onions, measuring the flour, and lining up your spices before turning on the stove.
@@ -191,6 +191,12 @@ espflash 4.0.1
 > [!IMPORTANT]  
 > We won't be calling `espflash` directly. Instead, it is being used as a runner in our [`config.toml`](template/.cargo/config.toml) file and automatically invoked by `cargo` when we run `cargo run`, which is more convenient!
 
+As a last step, install [ldproxy](https://crates.io/crates/ldproxy) which is a small utility that helps with linking the final binary:
+
+```bash
+cargo install ldproxy
+```
+
 ---
 
 ## Testing your setup
@@ -209,12 +215,33 @@ cd template/
 cargo run --release
 ```
 
+<details>
+  <summary>The first run might be slow and requires good internet, because...</summary>
+
+When you build for the first time, [embuild](https://github.com/esp-rs/embuild) will fetch the full ESP-IDF toolchain, the C compiler, and all required dependencies.  
+This step is heavy:
+
+- It downloads ESP-IDF (with all its submodules — a real chonker 🐘).
+- It installs tools into a local `.embuild` folder (not global, so it won't dirty your system).
+- It requires `git` and `python` to be installed.
+- Depending on your internet speed, this can take a long time, and GitHub rate limits can sometimes cause hiccups if many people fetch at once.
+
+If something goes wrong, you can simply delete the `.embuild` directory and try again — nothing else on your system will be affected.
+
+</details>
+
 If you want to see something more impressive, try running one of these applications in the [apps](apps/) folder. For example:
 
 ```bash
 git submodule update --init --recursive
 cd apps/mousefood-esp32-demo
 cargo run
+```
+
+There are also pre-built firmware binaries in [app/binaries](app/binaries) you can flash directly with `espflash`:
+
+```bash
+espflash flash --monitor apps/binaries/mousefood-demo.bin
 ```
 
 Now look at what you did!
@@ -226,6 +253,20 @@ Now look at what you did!
 <img src="assets/mousefood-demo.gif" width="600">
 
 </p>
+
+---
+
+## Simulator
+
+If you're into fast food places like McDonald's and not into cooking at home, first off shame on you! But second, you can still run mousefood apps on your computer inside a simulator! Also this might be an alternative option if you're struggling with the ESP32 setup.
+
+Simply go to the [simulator](apps/simulator) folder and run:
+
+```bash
+cargo run
+```
+
+Please note that this app requires [SDL2](https://wiki.libsdl.org/SDL2/Installation) to be installed and it uses [embedded-graphics-simulator](https://crates.io/crates/embedded-graphics-simulator).
 
 ---
 
@@ -262,3 +303,5 @@ See [this link](https://docs.esp-rs.org/std-training/02_1_hardware.html) for che
 ### Linux-specific issues
 
 There can't be any issues. Linux is just perfect.
+
+Jokes aside, if you experience any issues with the permissions for the serial devices, take a look at this [link](https://unix.stackexchange.com/a/529120).

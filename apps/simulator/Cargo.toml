@@ -1,0 +1,8 @@
+[package]
+name = "simulator"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.100"
+embedded-graphics-simulator = "0.7.0"
+mousefood = "0.2.1"

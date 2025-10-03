@@ -12,6 +12,12 @@
 >
 > Join us for a session packed with awesome terminal UIs and hands-on hacking with embedded Rust!
 
+## Schedule
+
+The workshop is meant to be completed **in 2 hours.**
+
+First 30 minutes will be [a presentation](https://github.com/orhun/embedded-ratatui-talk) about Ratatui and embedded Rust, followed by a 90-minute hands-on workshop.
+
 ## Workshop Preparation
 
 If you don't have everything set up, I'm afraid we won't have enough time to do hacking during the [workshop](./README.md).
@@ -20,26 +26,20 @@ So please make sure to complete the steps in [PREPARATION.md](./PREPARATION.md) 
 
 ## Templates
 
-TODO
+There is a template project in the [`template/`](./template) folder that you can use as a starting point.
 
-## Presentation
+Each file is well documented to help you understand what is going on.
 
-This repository also includes a talk about Ratatui and embedded Rust.
+## Show and Tell
 
-To start the presentation, first install [presenterm](https://github.com/mfontanini/presenterm):
+Join the [Ratatui Discord](https://discord.gg/pMCEU9hNEj) and share your creations with the other terminal chefs!
 
-```bash
-cargo install presenterm
-```
+If you have any questions or need help, feel free to ask there as well!
 
-Then simply run:
+## License
 
-```bash
-presenterm presentation.md -X -c config/presenterm.yml -p
-```
+Copyright © 2025, [Orhun Parmaksız](https://github.com/orhun)
 
-> [!IMPORTANT]  
-> It is recommended to use [wezterm](https://github.com/wez/wezterm) for good image rendering. The configuration file can be found in [`config/wezterm.lua`](./config/wezterm.lua).
+Licensed under [The MIT License](./LICENSE)
 
-> [!TIP]  
-> Run the [`present.sh`](./present.sh) script to present with the recommended tools and configuration.
+🦀 ノ( º \_ º ノ) - respect crables!

@@ -3,10 +3,17 @@
 This is a template for you to start your own Ratatui project for embedded devices.
 It includes all the necessary configuration files and a minimal example to get you started.
 
+Make sure you clone the repository and navigate to the `template` folder:
+
+```bash
+git clone https://github.com/orhun/embedded-ratatui-workshop
+cd embedded-ratatui-workshop/template
+```
+
 ## Running
 
 > [!WARNING]
-> Make sure you have completed the prerequisites in [preparation steps](PREPARATION.md).
+> Make sure you have completed the prerequisites in [preparation steps](../PREPARATION.md).
 
 To run the example application, connect your ESP32 device to your computer and execute:
 
@@ -22,7 +29,7 @@ This command will build the project, flash it to the connected device, and open 
 .
 ├── build.rs             -> Build script to set up ESP-IDF environment
 ├── .cargo
-│   └── config.toml      -> Cargo configuration for ESP32
+│   └── config.toml      -> Cargo configuration for ESP32
 ├── Cargo.toml           -> Dependencies and project metadata
 ├── rust-toolchain.toml  -> Specifies Rust toolchain for ESP32
 ├── sdkconfig.defaults   -> ESP-IDF configuration (such as stack size)
