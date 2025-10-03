@@ -30,6 +30,34 @@ Here is a checklist of what you need:
 
 ---
 
+### TL;DR
+
+If you are an experienced chef and just want to get things done quickly, here is a TL;DR setup script that you can run in your terminal:
+
+```bash
+# TL;DR setup script 🐀👨‍🍳
+
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Add Rust to PATH (only needed if not already in shell)
+source $HOME/.cargo/env
+
+# Install ESP32 toolchain manager
+cargo install espup
+espup install
+
+# Setup environment variables (must be done in each new terminal session)
+. ~/export-esp.sh
+
+# Install flashing and linking tools
+cargo install espflash ldproxy
+```
+
+But we highly recommend you to follow the steps below for additional context.
+
+---
+
 ### Installing Rust
 
 Oh, you are asking what is Rust? You can think of it as our cooking pot. It provides a safe and leak-free environment for us to cook (water & memory leaks).
