@@ -27,6 +27,7 @@ Here is a checklist of what you need:
 - [ ] A terminal ([Wezterm](https://wezterm.org) is recommended.)
 - [ ] A code editor with Rust support (e.g. [VS Code](https://code.visualstudio.com/), [RustRover](https://www.jetbrains.com/rust/), [Neovim](https://neovim.io/), etc.)
 - [ ] An USB-C cable that supports data transfer (not just charging)
+- [ ] Python >=3.12 (required for ESP-IDF)
 
 ---
 
